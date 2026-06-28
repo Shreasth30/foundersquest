@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain Details | E-Cell NIET Recruitment</title>
+    <meta name="description" content="Explore open domains at E-Cell NIET.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        .domain-hero {
+            padding-top: 120px;
+            padding-bottom: 40px;
+            text-align: center;
+            min-height: 40vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .domain-icon-large {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        .domain-details-card {
+            max-width: 800px;
+            margin: 0 auto 4rem auto;
+            text-align: left;
+        }
+        .domain-details-card h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.5rem;
+        }
+        .domain-details-card ul {
+            list-style-type: disc;
+            margin-left: 2rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+        .domain-details-card p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="logo.jpg" alt="E-Cell NIET Logo" class="logo-img">
+                E-CELL <span style="color: var(--primary-color)">NIET</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#domains">Domains</a></li>
+                <li><a href="index.html#journey">Journey</a></li>
+                <li><a href="index.html#apply" class="nav-btn">Apply Now</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Domain Hero -->
+    <section class="domain-hero" id="domain-hero">
+        <div class="container">
+            <div class="domain-icon-large" id="dom-icon">...</div>
+            <h1 class="glitch" id="dom-title" data-text="Loading..." style="font-size: 3rem;">Loading...</h1>
+            <h2 class="subheading" id="dom-subtitle">Please wait while we load domain details.</h2>
+        </div>
+    </section>
+
+    <!-- Domain Content -->
+    <section class="section">
+        <div class="container">
+            <div class="glass-card domain-details-card fade-up">
+                
+                <h3>About The Field</h3>
+                <p id="dom-field">Loading field information...</p>
+
+                <h3>Key Responsibilities</h3>
+                <ul id="dom-responsibilities">
+                    <li>Loading...</li>
+                </ul>
+
+                <h3>Ideal Candidate</h3>
+                <p id="dom-candidate">Loading candidate profile...</p>
+
+                <div class="action-buttons">
+                    <a href="index.html#domains" class="btn secondary-btn">Back to Domains</a>
+                    <a href="index.html#apply" class="btn primary-btn">Apply Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container text-center">
+            <p>&copy; 2026 E-Cell NIET. Build. Lead. Innovate.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

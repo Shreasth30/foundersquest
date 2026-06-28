@@ -168,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentStep++;
                 updateWizard();
             }
+            
         });
     });
 
@@ -223,52 +224,223 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Submit Handling
-    document.getElementById('final-submit-btn').addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        if (!validateStep()) return;
-        captureDataForCurrentStep();
+    const submitBtn = document.getElementById('final-submit-btn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            if (!validateStep()) return;
+            captureDataForCurrentStep();
 
-        // Generate Application ID
-        const randomID = Math.floor(1000 + Math.random() * 9000);
-        const appId = `EC-2026-${randomID}`;
-        document.getElementById('generated-app-id').innerText = appId;
-        applicationData.appID = appId;
+            // Generate Application ID
+            const randomID = Math.floor(1000 + Math.random() * 9000);
+            const appId = `EC-2026-${randomID}`;
+            document.getElementById('generated-app-id').innerText = appId;
+            applicationData.appID = appId;
 
-        // Log the application data object
+            // Log the application data object
+            applicationData.appID = appId;
+            applicationData.pitch = applicationData.pitch_q1;
+            applicationData.tagline = applicationData.pitch_q2;
 
-        applicationData.appID = appId;
+            console.log("Submission Data:", applicationData);
+            
+            // Fetch API request to Google Apps Script
+            const appsScriptUrl = "https://script.google.com/macros/s/AKfycbyuiCp0wI4oQNE817fcaEiH0Vv2GWN_Zl5g58S4X-XGW0BDXwKmt8cg_fhheUabrZyTtQ/exec";
 
-        applicationData.pitch = applicationData.pitch_q1;
-        applicationData.tagline = applicationData.pitch_q2;
-
-        console.log("Submission Data:", applicationData);
-        
-        // Fetch API request to Google Apps Script
-        const appsScriptUrl = "https://script.google.com/macros/s/AKfycbyuiCp0wI4oQNE817fcaEiH0Vv2GWN_Zl5g58S4X-XGW0BDXwKmt8cg_fhheUabrZyTtQ/exec";
-
-        try {
-            fetch(appsScriptUrl, {
-                method: 'POST',
-                mode: 'no-cors', // typically needed for Apps Script
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(applicationData)
-            }).then(() => {
-                console.log('Successfully sent to Google Apps Script');
-            }).catch(err => {
-                console.error('Error submitting application:', err);
-            }).finally(() => {
-                // Advance to Success Step regardless
+            try {
+                fetch(appsScriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors', // typically needed for Apps Script
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(applicationData)
+                }).then(() => {
+                    console.log('Successfully sent to Google Apps Script');
+                }).catch(err => {
+                    console.error('Error submitting application:', err);
+                }).finally(() => {
+                    // Advance to Success Step regardless
+                    currentStep = 6;
+                    updateWizard();
+                });
+            } catch (error) {
+                console.error('Synchronous error submitting application:', error);
+                // Show success anyway for UX since it's a mock url
                 currentStep = 6;
                 updateWizard();
-            });
-        } catch (error) {
-            console.error('Synchronous error submitting application:', error);
-            // Show success anyway for UX since it's a mock url
-            currentStep = 6;
-            updateWizard();
-        }
+            }
+        });
+    }
+
+    /* ===== Vanilla Tilt Init ===== */
+    VanillaTilt.init(document.querySelectorAll(".glass-card, .domain-card"), {
+        max: 5,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.1,
     });
+
+    /* ===== Custom Cursor ===== */
+    const cursor = document.createElement('div');
+    cursor.classList.add('custom-cursor');
+    document.body.appendChild(cursor);
+
+    document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
+
+    document.querySelectorAll('a, button, .checkbox-card').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    /* ===== Dynamic Domain Pages Logic ===== */
+    const domainDetails = {
+        "marketing": {
+            icon: "📈",
+            title: "Marketing & Branding",
+            subtitle: "Craft the narrative and grow our audience.",
+            field: "Marketing in a startup ecosystem is about more than just running ads; it's about building a cult-like following. You are the voice of E-Cell NIET. You will craft narratives, build anticipation, and ensure our events reach the right people at the right time.",
+            responsibilities: [
+                "Develop and execute comprehensive marketing campaigns for flagship events.",
+                "Build and manage the brand identity of E-Cell NIET.",
+                "Analyze engagement metrics to optimize future marketing strategies.",
+                "Collaborate with the design team to ensure visual consistency."
+            ],
+            candidate: "You are persuasive, analytical, and highly creative. You know how to capture attention in a noisy digital world and can write copy that converts."
+        },
+        "technical": {
+            icon: "💻",
+            title: "Technical Team",
+            subtitle: "Build scalable products and platforms.",
+            field: "The technical team is the backbone of our digital presence. From building platforms for recruitment to creating tools that our internal teams use to operate efficiently, you will solve real-world problems through code.",
+            responsibilities: [
+                "Provide technical infrastructure and seamless digital experiences for all E-Cell events and hackathons.",
+                "Build scalable applications for event registrations and management.",
+                "Ensure website security, performance, and responsive design.",
+                "Explore new technologies (Web3, AI) to implement in our workflows."
+            ],
+            candidate: "You are a problem solver who loves writing clean code. You know React, Node, or just pure Javascript, and are always eager to learn the next big tech stack."
+        },
+        "design": {
+            icon: "🎨",
+            title: "Design & Creative",
+            subtitle: "Design premium experiences and visual identities.",
+            field: "Design dictates how people perceive us. In this domain, you will translate abstract concepts into stunning visual realities. You set the aesthetic standard for everything E-Cell produces.",
+            responsibilities: [
+                "Create high-quality graphics, posters, and UI/UX mockups.",
+                "Design merchandise, ID cards, and official E-Cell documents.",
+                "Maintain a consistent, premium visual language across all platforms.",
+                "Produce visually compelling pitch decks and reports."
+            ],
+            candidate: "You have an impeccable eye for detail, color, and typography. You know your way around Figma, Illustrator, or Photoshop, and believe that good design is good business."
+        },
+        "operations": {
+            icon: "⚙️",
+            title: "Operations & Management",
+            subtitle: "Ensure smooth execution of high-impact events.",
+            field: "Ideas are cheap; execution is everything. The Operations team is the engine room of E-Cell. You ensure that our ambitious plans actually happen, on time, and perfectly orchestrated.",
+            responsibilities: [
+                "Plan and execute event logistics, from venue booking to crowd control.",
+                "Manage internal team communications and workflows.",
+                "Handle the supply chain for merchandise and event materials.",
+                "Troubleshoot on-ground problems in real-time during major events."
+            ],
+            candidate: "You are organized, calm under pressure, and highly reliable. You are a natural leader who knows how to delegate and get things done when the clock is ticking."
+        },
+        "social-media": {
+            icon: "📱",
+            title: "Social Media & Content",
+            subtitle: "Engage the community through viral content.",
+            field: "Social media is our primary touchpoint with the student community. This team is responsible for keeping E-Cell relevant, engaging, and top-of-mind through high-quality, shareable content.",
+            responsibilities: [
+                "Manage Instagram, LinkedIn, and Twitter accounts daily.",
+                "Script, shoot, and edit short-form video content (Reels/Shorts).",
+                "Write engaging captions, threads, and newsletters.",
+                "Stay on top of internet trends and adapt them for our brand."
+            ],
+            candidate: "You live on the internet. You understand algorithms, know what makes a video go viral, and have a knack for storytelling. Video editing skills are a huge plus."
+        },
+        "sponsorship": {
+            icon: "🤝",
+            title: "Sponsorship & Corporate Relations",
+            subtitle: "Secure funding and manage corporate partnerships.",
+            field: "No event happens without capital. This team is the financial lifeblood of E-Cell. You will interact directly with corporate executives, negotiate deals, and secure the resources we need to build big.",
+            responsibilities: [
+                "Pitch to potential sponsors and secure funding for events.",
+                "Draft professional sponsorship brochures and proposals.",
+                "Maintain long-term relationships with corporate partners.",
+                "Ensure sponsor deliverables (brand visibility, stalls) are met during events."
+            ],
+            candidate: "You are highly articulate, confident, and not afraid of rejection. You have excellent professional communication skills (written and verbal) and a strong business acumen."
+        },
+        "outreach": {
+            icon: "🚀",
+            title: "Startup Outreach",
+            subtitle: "Connect with emerging founders and startups.",
+            field: "E-Cell is nothing without its network. The Outreach team bridges the gap between our campus and the actual startup ecosystem, bringing in founders, investors, and mentors.",
+            responsibilities: [
+                "Identify and invite startup founders, VCs, and industry experts as speakers.",
+                "Build partnerships with other incubators and E-Cells across India.",
+                "Manage guest relations and ensure a premium experience for speakers.",
+                "Curate panels and workshops with relevant industry leaders."
+            ],
+            candidate: "You are a master networker. You know how to write cold emails that get responses, and you have a genuine interest in the startup ecosystem and its key players."
+        },
+        "research": {
+            icon: "🔬",
+            title: "Research & Strategy",
+            subtitle: "Analyze trends and develop growth strategies.",
+            field: "The Strategy team dictates the long-term vision of E-Cell. You analyze what works, what doesn't, and what we should do next. You ensure that every action we take aligns with our core mission.",
+            responsibilities: [
+                "Conduct market research on campus trends and student needs.",
+                "Develop data-driven strategies for user acquisition (recruitment/events).",
+                "Analyze the success/failure metrics of past events to improve future ones.",
+                "Write deep-dive reports on startup sectors for our community."
+            ],
+            candidate: "You are highly analytical, curious, and love data. You think 10 steps ahead and prefer making decisions based on evidence rather than gut feeling."
+        }
+    };
+
+    // Check if we are on the domain page
+    if (window.location.pathname.includes('domain.html')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const domainId = urlParams.get('id');
+
+        if (domainId && domainDetails[domainId]) {
+            const data = domainDetails[domainId];
+            
+            // Populate DOM
+            document.title = `${data.title} | E-Cell NIET`;
+            document.getElementById('dom-icon').innerText = data.icon;
+            
+            const titleEl = document.getElementById('dom-title');
+            titleEl.innerText = data.title;
+            titleEl.setAttribute('data-text', data.title);
+            
+            document.getElementById('dom-subtitle').innerText = data.subtitle;
+            document.getElementById('dom-field').innerText = data.field;
+            document.getElementById('dom-candidate').innerText = data.candidate;
+            
+            const respList = document.getElementById('dom-responsibilities');
+            respList.innerHTML = '';
+            data.responsibilities.forEach(task => {
+                const li = document.createElement('li');
+                li.innerText = task;
+                respList.appendChild(li);
+            });
+        } else {
+            // Fallback if ID is invalid or missing
+            document.getElementById('dom-title').innerText = "Domain Not Found";
+            document.getElementById('dom-title').setAttribute('data-text', "Domain Not Found");
+            document.getElementById('dom-subtitle').innerText = "Please go back and select a valid domain.";
+            document.getElementById('dom-field').innerText = "N/A";
+            document.getElementById('dom-candidate').innerText = "N/A";
+            document.getElementById('dom-responsibilities').innerHTML = "<li>N/A</li>";
+        }
+    }
+
 });
