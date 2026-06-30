@@ -443,4 +443,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /* ===== Helpdesk Widget Toggle ===== */
+    const helpdeskFab = document.getElementById('helpdesk-fab');
+    const helpdeskWidget = document.getElementById('helpdesk-widget');
+    if (helpdeskFab && helpdeskWidget) {
+        helpdeskFab.addEventListener('click', () => {
+            helpdeskWidget.classList.toggle('open');
+        });
+    }
+
 });

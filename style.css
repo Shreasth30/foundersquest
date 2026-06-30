@@ -376,12 +376,45 @@ a {
     padding: 1.5rem;
     text-align: center;
     transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
 }
 
 .domain-card:hover {
     border-color: var(--primary-color);
     background: var(--secondary-color);
     transform: translateY(-5px);
+}
+
+.domain-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 10, 0.55);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 12px;
+}
+
+.domain-overlay span {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: #f0ec0a;
+    letter-spacing: 0.5px;
+    transform: translateY(100px);
+    transition: transform 0.3s ease;
+}
+
+.domain-card:hover .domain-overlay {
+    opacity: 1;
+}
+
+.domain-card:hover .domain-overlay span {
+    transform: translateY(0);
 }
 
 .domain-icon {
@@ -678,6 +711,147 @@ input:focus, textarea:focus {
     font-size: 2rem;
     letter-spacing: 2px;
     color: var(--accent-color);
+}
+
+/* ===== Helpdesk Widget ===== */
+.helpdesk-widget {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.helpdesk-fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: none;
+    box-shadow: 0 4px 20px rgba(229, 9, 20, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.helpdesk-fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 28px rgba(229, 9, 20, 0.5);
+}
+
+.helpdesk-fab .fab-icon-close {
+    display: none;
+    font-style: normal;
+}
+
+.helpdesk-widget.open .helpdesk-fab .fab-icon-open {
+    display: none;
+}
+
+.helpdesk-widget.open .helpdesk-fab .fab-icon-close {
+    display: inline;
+}
+
+.helpdesk-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    min-width: 220px;
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.helpdesk-widget.open .helpdesk-panel {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.helpdesk-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.helpdesk-contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    background: var(--bg-color);
+    border: 1px solid var(--card-border);
+    transition: border-color 0.2s ease;
+}
+
+.helpdesk-contact:last-child {
+    margin-bottom: 0;
+}
+
+.helpdesk-contact:hover {
+    border-color: var(--card-hover-border);
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.contact-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.contact-position {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.contact-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.contact-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    background: var(--secondary-color);
+    border: 1px solid var(--card-border);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.contact-btn:hover {
+    transform: scale(1.15);
+}
+
+.contact-btn.phone:hover {
+    border-color: var(--primary-color);
+}
+
+.contact-btn.whatsapp:hover {
+    border-color: #25d366;
 }
 
 /* ===== Footer ===== */
