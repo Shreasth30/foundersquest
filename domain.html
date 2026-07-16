@@ -50,6 +50,13 @@
             gap: 1.5rem;
             margin-top: 3rem;
         }
+        @media (max-width: 768px) {
+            .domain-icon-large { font-size: 3.5rem; }
+            .action-buttons { flex-direction: column; gap: 1rem; }
+            .action-buttons .btn { width: 100%; text-align: center; }
+            .domain-details-card h3 { font-size: 1.25rem; }
+            .domain-hero { padding-top: 100px; min-height: auto; }
+        }
     </style>
 </head>
 <body>
@@ -79,7 +86,7 @@
     <section class="domain-hero" id="domain-hero">
         <div class="container">
             <div class="domain-icon-large" id="dom-icon">...</div>
-            <h1 class="glitch" id="dom-title" data-text="Loading..." style="font-size: 3rem;">Loading...</h1>
+            <h1 class="glitch" id="dom-title" data-text="Loading...">Loading...</h1>
             <h2 class="subheading" id="dom-subtitle">Please wait while we load domain details.</h2>
         </div>
     </section>

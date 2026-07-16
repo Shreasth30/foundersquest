@@ -895,14 +895,23 @@ footer p {
         gap: 1.5rem;
         border-bottom: 1px solid var(--card-border);
         clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-        transition: clip-path 0.4s ease;
+        transition: clip-path 0.4s ease, opacity 0.4s ease;
+        opacity: 0;
+        pointer-events: none;
     }
 
     .nav-links.active {
         clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        opacity: 1;
+        pointer-events: auto;
     }
 
-    .hamburger { display: flex; }
+    .hamburger { display: flex; z-index: 1001; }
+    .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    
+    .section { padding: 4rem 0; }
     
     .hero-buttons { flex-direction: column; gap: 1rem; }
     
