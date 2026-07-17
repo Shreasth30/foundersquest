@@ -5,13 +5,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
+    // High-performance scroll sentinel to toggle navbar styling without scroll event listeners
+    const sentinel = document.createElement('div');
+    sentinel.style.cssText = 'position: absolute; top: 0; left: 0; height: 50px; width: 1px; pointer-events: none; visibility: hidden;';
+    document.body.prepend(sentinel);
+
+    const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    }, { threshold: 0 });
+
+    navObserver.observe(sentinel);
 
     hamburger.addEventListener('click', () => {
         navLinks.classList.toggle('active');
@@ -246,7 +255,11 @@ document.addEventListener('DOMContentLoaded', () => {
             applicationData.tagline = applicationData.pitch_q2;
 
             console.log("Submission Data:", applicationData);
-            
+            // Disable button to prevent multiple submissions
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Submitting Mission...';
+
             // Fetch API request to Google Apps Script
             const appsScriptUrl = "https://script.google.com/macros/s/AKfycbyuiCp0wI4oQNE817fcaEiH0Vv2GWN_Zl5g58S4X-XGW0BDXwKmt8cg_fhheUabrZyTtQ/exec";
 
@@ -262,6 +275,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('Successfully sent to Google Apps Script');
                 }).catch(err => {
                     console.error('Error submitting application:', err);
+                    // Re-enable and restore button text on error
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalBtnText;
                 }).finally(() => {
                     // Advance to Success Step regardless
                     currentStep = 6;
@@ -276,28 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* ===== Vanilla Tilt Init ===== */
-    VanillaTilt.init(document.querySelectorAll(".glass-card, .domain-card"), {
-        max: 5,
-        speed: 400,
-        glare: true,
-        "max-glare": 0.1,
-    });
-
-    /* ===== Custom Cursor ===== */
-    const cursor = document.createElement('div');
-    cursor.classList.add('custom-cursor');
-    document.body.appendChild(cursor);
-
-    document.addEventListener('mousemove', e => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-    });
-
-    document.querySelectorAll('a, button, .checkbox-card').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-    });
 
     /* ===== Dynamic Domain Pages Logic ===== */
     const domainDetails = {
@@ -408,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Check if we are on the domain page
-    if (window.location.pathname.includes('domain.html')) {
+    if (window.location.pathname.toLowerCase().includes('domain')) {
         const urlParams = new URLSearchParams(window.location.search);
         const domainId = urlParams.get('id');
 

@@ -107,6 +107,13 @@ a {
     transform: translateY(-2px);
 }
 
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+}
+
 .grid {
     display: grid;
     gap: 2rem;
@@ -252,38 +259,39 @@ a {
     width: 100%;
     height: 100%;
     opacity: 0.8;
+    will-change: clip-path;
 }
 
 .glitch::before {
     left: 2px;
     text-shadow: -2px 0 #ef4444;
-    clip: rect(24px, 550px, 90px, 0);
+    clip-path: inset(24% 0 10% 0);
     animation: glitch-anim-2 3s infinite linear alternate-reverse;
 }
 
 .glitch::after {
     left: -2px;
     text-shadow: -2px 0 #ffffff;
-    clip: rect(85px, 550px, 140px, 0);
+    clip-path: inset(85% 0 5% 0);
     animation: glitch-anim 2.5s infinite linear alternate-reverse;
 }
 
 @keyframes glitch-anim {
-    0% { clip: rect(10px, 9999px, 83px, 0); }
-    20% { clip: rect(65px, 9999px, 11px, 0); }
-    40% { clip: rect(38px, 9999px, 50px, 0); }
-    60% { clip: rect(89px, 9999px, 16px, 0); }
-    80% { clip: rect(4px, 9999px, 90px, 0); }
-    100% { clip: rect(52px, 9999px, 34px, 0); }
+    0% { clip-path: inset(10% 0 85% 0); }
+    20% { clip-path: inset(65% 0 11% 0); }
+    40% { clip-path: inset(38% 0 50% 0); }
+    60% { clip-path: inset(89% 0 16% 0); }
+    80% { clip-path: inset(4% 0 90% 0); }
+    100% { clip-path: inset(52% 0 34% 0); }
 }
 
 @keyframes glitch-anim-2 {
-    0% { clip: rect(65px, 9999px, 100px, 0); }
-    20% { clip: rect(3px, 9999px, 20px, 0); }
-    40% { clip: rect(40px, 9999px, 80px, 0); }
-    60% { clip: rect(89px, 9999px, 16px, 0); }
-    80% { clip: rect(15px, 9999px, 60px, 0); }
-    100% { clip: rect(52px, 9999px, 90px, 0); }
+    0% { clip-path: inset(65% 0 35% 0); }
+    20% { clip-path: inset(3% 0 20% 0); }
+    40% { clip-path: inset(40% 0 80% 0); }
+    60% { clip-path: inset(89% 0 16% 0); }
+    80% { clip-path: inset(15% 0 60% 0); }
+    100% { clip-path: inset(52% 0 90% 0); }
 }
 
 .hero-content .subheading {
@@ -303,11 +311,11 @@ a {
 
 /* Background Particles (Simple CSS) */
 #particles {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background: var(--bg-color);
     z-index: -1;
     overflow: hidden;
@@ -332,6 +340,7 @@ a {
     background-size: 200px 200px;
     animation: stars 100s linear infinite;
     opacity: 0.3;
+    will-change: transform;
 }
 #particles::after {
     background-size: 300px 300px;
@@ -433,7 +442,7 @@ a {
 .timeline::before {
     content: '';
     position: absolute;
-    left: 0;
+    left: 7px;
     top: 0;
     height: 100%;
     width: 2px;
@@ -444,6 +453,7 @@ a {
 .timeline-item {
     position: relative;
     margin-bottom: 3rem;
+    padding-left: 1rem;
 }
 
 .timeline-item:last-child {
@@ -452,8 +462,8 @@ a {
 
 .timeline-dot {
     position: absolute;
-    left: -2.35rem;
-    top: 0.5rem;
+    left: -2rem;
+    top: 6px;
     width: 16px;
     height: 16px;
     border-radius: 50%;
@@ -736,7 +746,7 @@ input:focus, textarea:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: none;
+    cursor: pointer;
     box-shadow: 0 4px 20px rgba(229, 9, 20, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -871,6 +881,7 @@ footer p {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: transform, opacity;
 }
 
 .fade-up.visible {
@@ -914,61 +925,55 @@ footer p {
     .section { padding: 4rem 0; }
     
     .hero-buttons { flex-direction: column; gap: 1rem; }
-    
-    .cards-grid, .domains-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .timeline::before {
-        left: 0;
-    }
-    .timeline-item {
-        padding-left: 1rem;
-    }
-    .timeline-dot {
-        left: -1.85rem;
-    }
 
     .stat-item h3 { font-size: 2.5rem; }
     .stat-item span { font-size: 1.8rem; }
     
-    .wizard-nav { flex-direction: column; }
-    .wizard-nav .btn { width: 100%; }
-    
     .marquee-content span { font-size: 1rem; margin: 0 1rem; }
 }
 
-@media (hover: none) and (pointer: coarse) {
-    /* Disable custom cursor on touch devices */
-    .custom-cursor { display: none !important; }
-    body, a, button, .checkbox-card { cursor: auto !important; }
+@media (max-width: 576px) {
+    .container {
+        padding: 0 1rem;
+    }
+    .glass-card {
+        padding: 1.25rem;
+    }
+    .domain-selection-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    .checkbox-label {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+    }
 }
 
-/* ===== Custom Cursor ===== */
-.custom-cursor {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    background-color: var(--primary-color);
-    border-radius: 50%;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    transition: width 0.2s, height 0.2s, background-color 0.2s;
-}
-
-.custom-cursor.hover {
-    width: 30px;
-    height: 30px;
-    background-color: rgba(229, 9, 20, 0.4);
-    border: 1px solid var(--primary-color);
-}
-
-body {
-    cursor: none; /* Hide default cursor */
-}
-a, button, .checkbox-card {
-    cursor: none;
+@media (max-width: 480px) {
+    .cards-grid, .domains-grid {
+        grid-template-columns: 1fr;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem 1rem;
+    }
+    .stat-item h3 { font-size: 2rem; }
+    .stat-item span { font-size: 1.5rem; }
+    .stat-item p { font-size: 0.9rem; }
+    .challenge-preview {
+        font-size: 0.85rem;
+    }
+    #generated-app-id {
+        font-size: 1.5rem;
+    }
+    .helpdesk-widget {
+        bottom: 1rem;
+        right: 1rem;
+    }
+    .helpdesk-panel {
+        min-width: calc(100vw - 2rem);
+        max-width: 320px;
+    }
 }
 
 /* ===== Marquee ===== */
@@ -991,6 +996,7 @@ a, button, .checkbox-card {
 .marquee-content {
     display: inline-block;
     animation: marquee 20s linear infinite;
+    will-change: transform;
 }
 
 .marquee-content span {
